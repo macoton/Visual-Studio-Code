@@ -1,0 +1,43 @@
+package com.example.demo;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class DemoApplication {
+
+	public static void main(String[] args) throws IOException {
+		if (args.length <= 0) {
+			String[] aaa = new String[] {"sample1.txt", "sample2.txt", "out1.txt", "out2.txt"};
+			args = aaa;
+		}
+		List<String> list1 = readList(args[0]);
+		List<String> list2 = readList(args[1]);
+		writeList(list1, args[2]);
+		writeList(list2, args[3]);
+	}
+
+	private static List<String> readList(String text) throws IOException {
+		List<String> list = new ArrayList<>();
+		var reader = Files.newBufferedReader(Paths.get(text));
+		var line = "";
+		while ((line = reader.readLine()) != null) {
+			list.add(line);
+		}
+		return list;
+	}
+
+	private static void writeList(List<String> list, String text) throws IOException {
+		var writer = Files.newBufferedWriter(Paths.get(text));
+		for (var line : list) {
+			writer.write(line);
+			writer.newLine();
+		}
+		writer.close();
+	}
+
+}
