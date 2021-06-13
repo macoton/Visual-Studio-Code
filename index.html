@@ -125,15 +125,15 @@
                                 let j = 0;
                                 while (i < M || j < N) {
                                     while (i < M && E[i] === 1) {
-                                        T.push(eval('('+ G.value + ')("' + A[i] + '")'));
+                                        T.push(unescape(eval('('+ G.value + ')("' + escape(A[i]) + '")')));
                                         i++;
                                     }
                                     while (j < N && F[j] === 1) {
-                                        T.push(eval('('+ H.value + ')("' + B[j] + '")'));
+                                        T.push(unescape(eval('('+ H.value + ')("' + escape(B[j]) + '")')));
                                         j++;
                                     }
                                     while (i < M && j < N && E[i] === 0 && F[j] === 0) {
-                                        T.push(eval('('+ I.value + ')("' + A[i] + '")'));
+                                        T.push(unescape(eval('('+ I.value + ')("' + escape(A[i]) + '")')));
                                         i++;
                                         j++
                                     }
