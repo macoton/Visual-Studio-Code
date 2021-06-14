@@ -124,20 +124,20 @@
                             const makeResult = (A, B, E, F, G, H, I) => {
                                 const M = A.length;
                                 const N = B.length;
-                                const T = new Array();
+                                let T = '';
                                 let i = 0;
                                 let j = 0;
                                 while (i < M || j < N) {
                                     while (i < M && E[i] === 1) {
-                                        T.push(unescape(eval('('+ G.value + ')("' + escape(A[i]) + '")')));
+                                        T += unescape(eval('('+ G.value + ')("' + escape(A[i]) + '")')) + '\r\n';
                                         i++;
                                     }
                                     while (j < N && F[j] === 1) {
-                                        T.push(unescape(eval('('+ H.value + ')("' + escape(B[j]) + '")')));
+                                        T += unescape(eval('('+ H.value + ')("' + escape(B[j]) + '")')) + '\r\n';
                                         j++;
                                     }
                                     while (i < M && j < N && E[i] === 0 && F[j] === 0) {
-                                        T.push(unescape(eval('('+ I.value + ')("' + escape(A[i]) + '")')));
+                                        T += unescape(eval('('+ I.value + ')("' + escape(A[i]) + '")')) + '\r\n';
                                         i++;
                                         j++
                                     }
@@ -151,14 +151,8 @@
                             const baseRow = baseText.split('\r\n');
                             const editRow = editText.split('\r\n');
                             const [deleteRow, addRow] = makeEdit(baseRow, editRow);
-                            const resultRow = makeResult(baseRow, editRow, deleteRow, addRow, deleteProc, addProc, sameProc);
-                            resultRow.forEach(
-                                (row) => {
-                                    const element = document.createElement('div');
-                                    element.innerHTML = row;
-                                    result.appendChild(element);
-                                }
-                            );
+                            const resultHtml = makeResult(baseRow, editRow, deleteRow, addRow, deleteProc, addProc, sameProc);
+                            result.innerHTML = resultHtml;
                             downloadElement.disabled = result.children.length <= 0;
                         }
                     );
@@ -167,11 +161,7 @@
                         'click',
                         () => {
                             const aaa = new Array();
-                            result.childNodes.forEach(
-                                (row) => {
-                                    aaa.push(row.innerHTML + '\r\n');
-                                }
-                            );
+                            aaa.push(result.innerHTML);
                             location.href = URL.createObjectURL(
                                 new Blob(
                                     aaa,
@@ -273,7 +263,7 @@
                 </div>
                 <div><input type="button" id="download" value="ダウンロード" disabled></div>
                 <div>ファイル内容</div>
-                <div id="result"></div>
+                <div><pre id="result"></pre></div>
             </div>
         </form>
     </body>
